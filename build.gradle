@@ -5,7 +5,6 @@ buildscript {
     repositories {
         google()
         jcenter()
-
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
@@ -19,10 +18,44 @@ allprojects {
     repositories {
         google()
         jcenter()
-
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+task printGradleInfo {
+    println "gradle hashCode:" + gradle.hashCode()
+    println "homeDir:" + gradle.gradleHomeDir
+    println "userHomeDir:" + gradle.gradleUserHomeDir
+    println "rootDir:" + gradle.rootProject.rootDir.absolute
+    println "parent: " + gradle.parent
+}
+
+// build.gradle
+gradle.addListener(new MyLifecycleListener())
+
+class MyLifecycleListener
+        implements TaskExecutionListener, BuildListener {
+    @Override
+    void buildStarted(Gradle gradle) {}
+
+    @Override
+    void settingsEvaluated(Settings settings) {}
+
+    @Override
+    void projectsLoaded(Gradle gradle) {}
+
+    @Override
+    void projectsEvaluated(Gradle gradle) {}
+
+    @Override
+    void buildFinished(BuildResult result) {}
+
+    @Override
+    void beforeExecute(Task task) {}
+
+    @Override
+    void afterExecute(Task task, TaskState state) {}
 }
