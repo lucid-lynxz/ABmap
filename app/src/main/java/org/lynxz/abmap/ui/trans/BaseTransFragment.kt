@@ -1,4 +1,4 @@
-1package org.lynxz.abmap.ui.trans
+package org.lynxz.abmap.ui.trans
 
 import android.os.Bundle
 
