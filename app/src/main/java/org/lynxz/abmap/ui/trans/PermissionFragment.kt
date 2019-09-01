@@ -163,10 +163,41 @@ class PermissionFragment : BaseTransFragment() {
         }
     }
 
+    // attach 后才进行权限申请, 若attach前, host页面就发起了权限请求,则存入 pendingPermissions 列表中,延迟申请
+    private var isAttached = false
+    private var isThreadPendingPermission = false // 是否存在待申请的权限,大部分时候可以不用创建 list
+    private val pendingPermissions by lazy { mutableListOf<Pair<Array<String>, IPermissionCallback?>>() }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        isAttached = true
+
+        if (isThreadPendingPermission) {
+            pendingPermissions.forEach {
+                requestPermissions(it.first, it.second)
+            }
+            pendingPermissions.clear()
+            isThreadPendingPermission = false
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        isAttached = false
+    }
+
+
     /**
      * 批量申请权限
      * */
     fun requestPermissions(permissions: Array<String>, callback: IPermissionCallback?) {
+
+        if (!isAttached) {
+            isThreadPendingPermission = true
+            pendingPermissions.add(permissions to callback)
+            return
+        }
+
         val requestCode = generateRequestCode()
         mCallbacks.put(requestCode, callback)
         requestPermissions(permissions, requestCode)

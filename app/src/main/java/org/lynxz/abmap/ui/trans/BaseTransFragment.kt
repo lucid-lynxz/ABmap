@@ -46,7 +46,7 @@ abstract class BaseTransFragment : Fragment() {
                     fragmentManager.beginTransaction()
                         .add(fragment, fragmentTag)
                         .commitAllowingStateLoss() //避免数据保存和恢复导致的crash
-                    fragmentManager.executePendingTransactions()
+//                    fragmentManager.executePendingTransactions()
                 }
                 return fragment.apply {
                     hostActivity = fragmentActivity
