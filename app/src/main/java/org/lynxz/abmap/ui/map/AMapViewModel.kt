@@ -8,6 +8,7 @@ import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
 import com.amap.api.maps.LocationSource
+import org.lynxz.abmap.util.Logger
 
 class AMapViewModel(application: Application) : AndroidViewModel(application), LocationSource,
     AMapLocationListener {
@@ -35,6 +36,7 @@ class AMapViewModel(application: Application) : AndroidViewModel(application), L
     }
 
     override fun onLocationChanged(location: AMapLocation?) {
+        Logger.d("onLocationChanged $location")
         mLocationClient.stopLocation()
         locationLiveData.postValue(location)
     }

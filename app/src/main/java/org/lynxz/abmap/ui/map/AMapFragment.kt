@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.amap.api.maps.AMapOptions
+import com.amap.api.maps.model.MyLocationStyle
 import kotlinx.android.synthetic.main.fragment_amap.*
 import org.lynxz.abmap.R
 import org.lynxz.abmap.ui.BaseFragment
@@ -18,6 +19,9 @@ class AMapFragment : BaseFragment(), IMapOperation {
 
     private val TAG = "AMapFragment"
     private lateinit var amapViewModel: AMapViewModel
+    private val myLocationStyle = MyLocationStyle().apply {
+        myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW)
+    }
 
     override fun changeCameraCenter(lon: Double, lat: Double) {
     }
@@ -33,11 +37,13 @@ class AMapFragment : BaseFragment(), IMapOperation {
 
         map_amap.onCreate(savedInstanceState)
         map_amap.map?.let { map ->
+            map.myLocationStyle = myLocationStyle
             map.setLocationSource(amapViewModel)
-            map.isMyLocationEnabled = true
+            map.isMyLocationEnabled = true // 定位图层按钮是否可点击
             map.uiSettings?.apply {
-                zoomPosition = AMapOptions.ZOOM_POSITION_RIGHT_CENTER
-                isMyLocationButtonEnabled = true
+                zoomPosition = AMapOptions.ZOOM_POSITION_RIGHT_CENTER // 右边中间显示缩放按钮
+                isCompassEnabled = true // 显示指南针
+                isMyLocationButtonEnabled = true // 定位logo
             }
         }
 
