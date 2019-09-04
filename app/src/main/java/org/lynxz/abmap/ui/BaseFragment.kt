@@ -46,5 +46,6 @@ abstract class BaseFragment : Fragment(), IPermissionCallback {
     }
 
     override fun onRequestResult(permission: PermissionResultInfo) {
+        Logger.d(TAG, "${permission.name}结果:${permission.granted}")
     }
 }

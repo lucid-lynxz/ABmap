@@ -35,9 +35,20 @@ class AMapViewModel(application: Application) : AndroidViewModel(application), L
         mLocationClient.onDestroy()
     }
 
+    fun stopLocation() {
+        mLocationClient.stopLocation()
+    }
+
     override fun onLocationChanged(location: AMapLocation?) {
         Logger.d("onLocationChanged $location")
         mLocationClient.stopLocation()
-        locationLiveData.postValue(location)
+        if (location?.errorCode == 0) { // 定位成功
+            locationLiveData.postValue(location)
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        deactivate()
     }
 }
